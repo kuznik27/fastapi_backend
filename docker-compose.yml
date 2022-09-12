@@ -1,0 +1,39 @@
+x-top-level: &defaults
+  env_file:
+    - .env
+  networks:
+    - stock_trades
+
+
+networks:
+  stock_trades:
+    name: stock_trades
+    attachable: true
+
+version: '3.8'
+
+services:
+  stock_trades_api:
+    <<: *defaults
+    build: ./
+    restart: always
+    container_name: stock_trades_api
+    ports:
+      - "8001:8001"
+    depends_on:
+      - stock_trades_db
+  
+
+  stock_trades_db:
+    <<: *defaults
+    image: postgres:10-alpine
+    container_name: stock_trades_db
+#    volumes:
+#      - ./db/dump:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: 123
+      POSTGRES_USER: postgres
+      POSTGRES_DB: stock_trades_db
+      POSTGRES_INITDB_ARGS: "-A md5"
+    ports:
+      - "5432:5432"
