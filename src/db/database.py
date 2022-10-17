@@ -2,7 +2,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 import databases
-from dependencies import settings
+from fastapi_backend.config.dependencies import settings
 
 DATABASE_URL = settings.db_url
 
