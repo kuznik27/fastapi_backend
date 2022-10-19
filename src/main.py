@@ -3,10 +3,9 @@ import logging
 import uvicorn
 from fastapi import FastAPI
 
-from fastapi_backend.src.db import database
-from fastapi_backend.src.db.database import Base, engine
-from fastapi_backend.src.trades.router import router as trades_router
-from fastapi_backend.src.users.router import router as users_router
+from fastapi_backend.src.handlers.trades import router as trades_router
+from fastapi_backend.src.handlers.users import router as users_router
+from fastapi_backend.src.storage.database import Base, engine, database
 
 logging.basicConfig(
     level=logging.INFO,
@@ -15,12 +14,11 @@ logging.basicConfig(
 
 logger = logging.getLogger("asdf")
 
-from fastapi_backend.src.users.models import Users
-from fastapi_backend.src.trades.models import Trades
-
 Base.metadata.create_all(engine)
 
 api = FastAPI()
+
+
 @api.on_event("startup")
 async def startup():
     await database.database.connect()
@@ -29,6 +27,7 @@ async def startup():
 @api.on_event("shutdown")
 async def shutdown():
     await database.database.disconnect()
+
 
 api.include_router(trades_router)
 api.include_router(users_router)

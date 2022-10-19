@@ -8,3 +8,4 @@ sqlalchemy
 psycopg2
 uvicorn
 python-dotenv
+jose
